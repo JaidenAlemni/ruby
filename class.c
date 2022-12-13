@@ -881,13 +881,18 @@ rb_define_class(const char *name, VALUE super)
 		     name, rb_obj_class(klass));
 	}
 	if (rb_class_real(RCLASS_SUPER(klass)) != super) {
-	    rb_raise(rb_eTypeError, "superclass mismatch for class %s", name);
+        // edited for mkxp-z
+        // makes some hackier forms of subclassing possible again
+
+        goto override_class;
+	    //rb_raise(rb_eTypeError, "superclass mismatch for class %s", name);
 	}
 
         /* Class may have been defined in Ruby and not pin-rooted */
         rb_vm_add_root_module(klass);
 	return klass;
     }
+override_class:
     if (!super) {
 	rb_raise(rb_eArgError, "no super class for `%s'", name);
     }

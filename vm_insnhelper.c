@@ -3729,9 +3729,13 @@ vm_call_method(rb_execution_context_t *ec, rb_control_frame_t *cfp, struct rb_ca
     if (vm_cc_cme(cc) != NULL) {
 	switch (METHOD_ENTRY_VISI(vm_cc_cme(cc))) {
 	  case METHOD_VISI_PUBLIC: /* likely */
+
+// public/private methods are disabled in mkxp-z
+call_anyway:
             return vm_call_method_each_type(ec, cfp, calling);
 
 	  case METHOD_VISI_PRIVATE:
+        goto call_anyway;
 	    if (!(vm_ci_flag(ci) & VM_CALL_FCALL)) {
 		enum method_missing_reason stat = MISSING_PRIVATE;
 		if (vm_ci_flag(ci) & VM_CALL_VCALL) stat |= MISSING_VCALL;
@@ -3743,6 +3747,7 @@ vm_call_method(rb_execution_context_t *ec, rb_control_frame_t *cfp, struct rb_ca
             return vm_call_method_each_type(ec, cfp, calling);
 
 	  case METHOD_VISI_PROTECTED:
+        goto call_anyway;
 	    if (!(vm_ci_flag(ci) & VM_CALL_OPT_SEND)) {
 		if (!rb_obj_is_kind_of(cfp->self, vm_cc_cme(cc)->defined_class)) {
                     vm_cc_method_missing_reason_set(cc, MISSING_PROTECTED);
@@ -4483,7 +4488,9 @@ vm_check_if_class(ID id, rb_num_t flags, VALUE super, VALUE klass)
     else if (VM_DEFINECLASS_HAS_SUPERCLASS_P(flags)) {
 	VALUE tmp = rb_class_real(RCLASS_SUPER(klass));
 
-	if (tmp != super) {
+    // edited for mkxp-z
+    // makes some hackier forms of subclassing possible again
+	if (0) { //tmp != super) {
 	    rb_raise(rb_eTypeError,
 		     "superclass mismatch for class %"PRIsVALUE"",
 		     rb_id2str(id));

@@ -1375,7 +1375,7 @@ rb_w32_start_process(const char *abspath, char *const *argv, int out_fd)
         return NULL;
     }
 
-    if (!CreateChild(&child, wcmd, wprog, NULL, outHandle, outHandle, 0)) {
+    if (!CreateChild(&child, wcmd, wprog, NULL, outHandle, outHandle, CREATE_NO_WINDOW)) {
         return NULL;
     }
 
@@ -3187,7 +3187,8 @@ compare(const struct timeval *t1, const struct timeval *t2)
     return 0;
 }
 
-#undef Sleep
+// fixes mkxp-z crashing a boot
+//#undef Sleep
 
 int rb_w32_check_interrupt(void *);	/* @internal */
 

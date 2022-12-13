@@ -827,7 +827,9 @@ rb_method_call_status(rb_execution_context_t *ec, const rb_callable_method_entry
     rb_method_visibility_t visi = METHOD_ENTRY_VISI(me);
 
     /* receiver specified form for private method */
-    if (UNLIKELY(visi != METHOD_VISI_PUBLIC)) {
+
+    // public/private methods are disabled in mkxp-z
+    if (0) { //UNLIKELY(visi != METHOD_VISI_PUBLIC)) {
         if (me->def->original_id == idMethodMissing) {
             return MISSING_NONE;
         }
