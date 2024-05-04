@@ -3024,7 +3024,6 @@ STATIC=
 			: ${DLDSHARED='$(CC) -dynamiclib'}
 			: ${LDFLAGS=""}
 			: ${LIBPATHENV=DYLD_FALLBACK_LIBRARY_PATH}
-			: ${PRELOADENV=DYLD_INSERT_LIBRARIES}
                         AS_IF([test x"$enable_shared" = xyes], [
                             # Resolve symbols from libruby.dylib when --enable-shared
                             EXTDLDFLAGS='$(LIBRUBYARG_SHARED)'
